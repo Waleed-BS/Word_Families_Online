@@ -1,9 +1,11 @@
 /*
     ./client/components/App.jsx
 */
-
 import React from 'react';
-import './App.scss';
+import './App.scss'
+
+/* imported components */
+import WorldFamilies from './WorldFamilies.jsx';
 
 class App extends React.Component {
 
@@ -11,9 +13,7 @@ class App extends React.Component {
 
     return (
       <div className="App">
-
-        <p> test </p>
-
+        <WorldFamilies />
       </div>
     );
   }
