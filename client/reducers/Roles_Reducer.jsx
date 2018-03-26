@@ -1,7 +1,7 @@
 
 import { UPDATE_ROLE } from '../actions/Role_Actions.jsx';
 
-const initialState = { role: 'none' };
+const initialState = { role: 'director' };
 
 export default function roles(state = initialState, action) {
   switch (action.type) {
