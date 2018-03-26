@@ -12,6 +12,7 @@ class WorldFamilies extends React.Component {
 
   state = {
     isPlayPressed: false,
+    role: '',
   }
 
   // function to be passed as props to UserInputForm component
@@ -31,8 +32,9 @@ class WorldFamilies extends React.Component {
           <div>
             <Images />
             <AudioController />
-          </div> :
-          <UserInputForm startgame={this.handlePlayButton}/>
+          </div>
+          :
+          <UserInputForm startgame={this.handlePlayButton} />
         }
       </div>
     );

@@ -3,7 +3,7 @@
 */
 import React from 'react';
 import './App.scss'
-
+import { connect } from 'react-redux';
 /* imported components */
 import WorldFamilies from './WorldFamilies.jsx';
 
@@ -18,4 +18,4 @@ class App extends React.Component {
     );
   }
 }
-export default App;
+export default connect()(App);

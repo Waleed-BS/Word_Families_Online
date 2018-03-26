@@ -2,9 +2,13 @@
     ./client/components/UserInputForm.jsx
 */
 import React from 'react';
+import { connect } from 'react-redux';
 
 /* imported components */
 import WorldFamilies from './WorldFamilies.jsx';
+
+/* imported actions */
+import { updateRole } from '../actions/Role_Actions.jsx';
 
 class UserInputForm extends React.Component {
 
@@ -18,6 +22,7 @@ class UserInputForm extends React.Component {
     this.setState({
       username: usernameInput
     })
+    console.log(this.props.role)
     // console.log("this.state.username", this.state.username);
   }
 
@@ -29,7 +34,6 @@ class UserInputForm extends React.Component {
   }
 
   handlePlayButton() {
-    const { startgame } = this.props;
     if(this.state.username === "") {
       this.setState({
         inputError: 'Please enter your username'
@@ -39,9 +43,14 @@ class UserInputForm extends React.Component {
         inputError: 'Please enter your country'
       })
     } else {
-      startgame();
+      this.props.startgame();
     }
     // console.log("isPlayPressed", this.state.isPlayPressed);
+  }
+
+  handleRoleChange(newRole) {
+    this.props.updateRoleDispatch(newRole)
+    console.log(this.props.role)
   }
 
   render() {
@@ -57,7 +66,7 @@ class UserInputForm extends React.Component {
         <br></br>
         <br></br>
         <label> Role </label>
-        <select>
+        <select onChange={(event) => this.handleRoleChange(event.target.value)} >
 	        <option value="director">Director</option>
 	        <option value="player">Player</option>
         </select>
@@ -72,4 +81,17 @@ class UserInputForm extends React.Component {
     );
   }
 }
-export default UserInputForm;
+
+const mapStateToProps = (state) => {
+  return {
+    role: state.role,
+  };
+};
+
+function mapDispatchToProps(dispatch) {
+  return {
+    updateRoleDispatch: (role) => dispatch(updateRole(role))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserInputForm);
