@@ -1,3 +1,25 @@
 .App {
   text-align: center;
+  // justify-content: center;
+}
+
+.container {
+
+}
+.Images {
+  // align-items: center;
+  display: flex;
+  text-align: center;
+  // flex-direction:row;
+  justify-content: center;
+  flex-wrap: nowrap | wrap | wrap-reverse;
+}
+
+.Images img {
+  text-align: center;
+
+}
+
+.Images .Highlight {
+  border: solid Blue 1px;
 }

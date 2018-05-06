@@ -1,17 +1,17 @@
 /*
     ./client/index.js
-    which is the webpack entry file
+    webpack entry file
 */
-/*
-    ./client/index.js
-*/
+
 
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './components/App.jsx';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
-import reducer from './reducers/Roles_Reducer.jsx'
+
+// import reducer from './reducers/Roles_Reducer.jsx'
+import reducer from './reducers/Game_Reducer.jsx';
 
 const store = createStore(
   reducer,

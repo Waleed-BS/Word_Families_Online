@@ -2,42 +2,126 @@
     ./client/components/WorldFamilies.jsx
 */
 import React from 'react';
+import io from 'socket.io-client';
 
 /* imported component */
 import UserInputForm from './UserInputForm.jsx';
 import Images from './Images.jsx';
 import AudioController from './AudioController.jsx';
 
+/* imported functions */
+// import { subscribeToTimer } from '../helper/subscribeToTimer.js';
+
 class WorldFamilies extends React.Component {
 
   state = {
-    isPlayPressed: false,
-    role: '',
+    IsPlayerWaiting: false,
+    hasGameStarted: false,
+    currentGame: null,
+    player: '',
+    currentTimeDate: '',
+    socket: null,
   }
 
-  // function to be passed as props to UserInputForm component
-  handlePlayButton = () => {
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   // don't rerender if currentGame is changing
+  //   return nextState.currentGame !== this.state.currentGame // Don't re-render if name is equal
+  // }
+
+  componentDidMount() {
+
+    console.log('WorldFamilies React Component Did Mount');
+
+  }
+
+  setHasGameStarted = (boolean) => {
+
     this.setState({
-      isPlayPressed: true
-    })
-    console.log("isPlayPressed", this.state.isPlayPressed);
+      hasGameStarted: boolean,
+    });
+
+  }
+
+  setIsPlayerWaiting = (boolean) => {
+
+    this.setState({
+      IsPlayerWaiting: boolean,
+    });
+
+  }
+
+  wait = () => {
+
+    const socket = io('localhost:3000')
+
+    this.setState({ socket });
+
+    this.setIsPlayerWaiting(true)
+
+    socket.on('onWait', (data) => {
+      console.count('Send Current Game To Client');
+      // set the state of this component to the currentGame
+      // emitted from the express server
+      this.setState({ currentGame: data.currentGame })
+      console.log('# players in game: ', data.currentGame.player_count + '/2');
+    }) // socket.on('Send Current Game To Client')
+
+    socket.on('onStartGame', (data) => {
+      this.setState({ currentGame: data.currentGame })
+      this.setState({ player: data.player })
+      console.log('# players in game: ', data.currentGame.player_count + '/2');
+      console.log('game is starting!');
+      this.startGame();
+    }) // socket.on('start game')
+
+    socket.on('onDisconnect', () => {
+      this.setHasGameStarted(false);
+      this.setIsPlayerWaiting(true);
+    }) // socket.on('onDisconnect')
+
+  }
+
+  startGame = () => {
+
+    this.setIsPlayerWaiting(false);
+    this.setHasGameStarted(true);
+
   }
 
   render() {
-    const { isPlayPressed } = this.state;
+    const { IsPlayerWaiting, hasGameStarted, player, socket } = this.state;
+    // console.log('Has game started?', hasGameStarted);
+    console.log('Rendering current game:', this.state.currentGame);
+    console.log('I am', player.role);
+
+
+    // const { role } = this.props;
     return (
       <div className="WorldFamilies">
-        {
-          isPlayPressed ?
-          <div>
-            <Images />
-            <AudioController />
-          </div>
-          :
-          <UserInputForm startgame={this.handlePlayButton} />
-        }
+
+        { hasGameStarted ? <div>
+          <Images />
+          <AudioController player_role={player.role} socket={socket}/>
+          {/* <p>{this.state.currentTimeDate}</p> */}
+        </div> : <div>
+          <UserInputForm wait={this.wait} />
+        </div> }
+
+        { IsPlayerWaiting && <div>
+          <p>Waiting for another player to start the game &nbsp;
+            <img
+              src="https://zippy.gfycat.com/SkinnySeveralAsianlion.gif"
+              height="20"
+              width="20"
+            />
+          </p>
+
+        </div> }
+
       </div>
     );
   }
+
 }
+
 export default WorldFamilies;

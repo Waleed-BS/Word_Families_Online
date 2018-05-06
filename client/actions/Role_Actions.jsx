@@ -1,5 +1,4 @@
 
-export const GET_ROLE = 'GET_ROLE';
 export const UPDATE_ROLE = 'UPDATE_ROLE';
 
 export function updateRole(role) {
@@ -9,6 +8,14 @@ export function updateRole(role) {
   };
 }
 
+export const UPDATE_GAME = 'UPDATE_GAME';
+export function updateGAME(game) {
+  return {
+    type: UPDATE_GAME,
+    game,
+  }
+
+}
 // export function updateRole({ role }) {
 //   return {
 //     type: UPDATE_ROLE,

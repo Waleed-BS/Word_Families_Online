@@ -9,25 +9,93 @@ import { ReactMic } from 'react-mic';
 class AudioController extends React.Component {
 
   state = {
-    isRecorded: false,
     record: false,
+    recordedBlob: '',
     blobURL: '',
+    isRecorded: false,
+    isSent: false,
+    isAnswered: false,
+  }
+
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   return nextState.recordedBlob !== this.state.recordedBlob
+  // }
+
+  componentDidMount() {
+
+    console.log('AudioController React Component Did Mount');
+
+    // if player is player_client
+    if(this.props.player_role === 'player') {
+      // recover the sent audio by player_host
+      // when socket player_host sends audio voice to express server
+      this.props.socket.on('onSendAudioToClient', (data) => {
+
+        const audioPlayer = document.getElementById('audioPlayer');
+
+        // rerender this component by changing the state to the new received audio
+        this.setState({
+          recordedBlob: data.recordedBlob
+        })
+
+        // callback to execute when audio finish playing
+        audioPlayer.onended = () => {
+
+          const minutesLabel = document.getElementById("minutes");
+          const secondsLabel = document.getElementById("seconds");
+          let totalSeconds = 0;
+
+          // call setTime function every second
+          setInterval(setTime, 1000);
+
+          // set a timer
+          function setTime() {
+
+            // seconds start from 1 (since the function got called after a second)
+            ++totalSeconds;
+
+            // set the seconds element from 0 to 59 then then
+            // then set it back to 0 when it reaches 60
+            secondsLabel.innerHTML = pad(totalSeconds % 60);
+            // set the minutes element
+            minutesLabel.innerHTML = pad(parseInt(totalSeconds / 60));
+          }
+
+          function pad(val) {
+            // convert the passed value to string
+            let valString = val + "";
+            // if there's only one digit, add a zero
+            if (valString.length < 2) {
+              return "0" + valString;
+            // else return the same string value
+            } else {
+              return valString;
+            }
+          }
+
+          // callback to execute when player answers the question
+
+          //todo: when player_client answer, stop the timer and store
+          // if(this.state.isAnswered)
+
+        } // audioPlayer.onended
+      }); // socket.on('onSendAudioToClient'
+    } // if(this.props.player_role === 'player')
+
   }
 
   // callback to execute when audio start recording
-  startRecording(event) {
+  startRecording = () => {
     this.setState({
       record: true
-    })
-    console.log("startRecording");
+    });
   }
 
   // callback to execute when audio stops recording
-  stopRecording(event) {
+  stopRecording = () => {
     this.setState({
       record: false
     });
-    console.log("stopRecording");
   }
 
   // not sure when this is called yet.
@@ -38,21 +106,54 @@ class AudioController extends React.Component {
   // callback to execute when audio stops recording
   onStop = (recordedBlob) => {
     this.setState({
-      blobURL: recordedBlob.blobURL
+      recordedBlob: recordedBlob,
+      isRecorded: true,
     });
+    console.log("onStop callback");
+  }
+
+  // send voice to player_client to hear
+  handleSendAudio(recordedBlob) {
+
+    // rerender this component by changing the state to the recorded audio
+    this.setState({ recordedBlob });
+    // emit the audio back to player_host socket in the express server
+    this.props.socket.emit('onSendAudioToServer', { recordedBlob });
+
   }
 
   render() {
-    const { blobURL } = this.state;
+
+    const { recordedBlob, isRecorded, isSent } = this.state;
+    const { player_role } = this.props;
+
     return (
       <div className="AudioControl">
-        <ReactMic record={this.state.record} onStop={this.onStop} />
-        <button value={true} onClick={(event) => this.startRecording(event.target.value)} type="button">Start</button>
-        <button value={false} onClick={(event) => this.stopRecording(event.target.value)} type="button">Stop</button>
-        <br/>
-        <audio controls src={this.state.blobURL}></audio>
+
+        {/* render this if player is player_host */}
+        { player_role === 'director' ? <div>
+          <ReactMic record={this.state.record} onStop={this.onStop} />
+          <button value={true} onClick={(event) => this.startRecording(event.target.value)} type="button">Start</button>
+          <button value={false} onClick={(event) => this.stopRecording(event.target.value)} type="button">Stop</button>
+          <audio controls src={recordedBlob.blobURL}></audio>
+          <br/>
+          {/* enable send button if audio is recorded */}
+          { isRecorded ?
+            <button value={'send'} onClick={() => this.handleSendAudio(recordedBlob)} type="button">Send</button> :
+            <button value={'send'} onClick={() => this.handleSendAudio(recordedBlob)} type="button" disabled>Send</button>
+          }
+        {/* render this if player is player_client */}
+        </div> : <div>
+          <br/>
+          <audio id="audioPlayer" src={recordedBlob.blobURL} controls></audio>
+          <br/>
+          {/* stopwatch */}
+          <label id="minutes">00</label>:<label id="seconds">00</label>
+        </div> }
+
       </div>
     );
   }
 }
+
 export default AudioController;
