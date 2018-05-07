@@ -19,7 +19,7 @@ gameserver.findGame = function(client) {
     let joined_a_game = false;
     // iterate through all existed games
     for(let gameid in this.games) {
-      // skip one iteration if this game doesn't a property of gameid
+      // skip one iteration if this game doesn't have a property of gameid
       if(!this.games.hasOwnProperty(gameid)) continue;
       // assign this game to game_instance
       const game_instance = this.games[gameid];
@@ -76,7 +76,7 @@ gameserver.createGame = function(client) {
   let player = {
     userID: client.userID,
   };
-  //Create a new game instance
+  // create a new game instance
   const thegame = {
     id: UUID(),                // generate a new id for the game
     player_host: player,       // so we know who initiated the game
@@ -87,9 +87,9 @@ gameserver.createGame = function(client) {
   thegame.player_host.role = 'director';
   // give the socket too a currentGame
   client.currentGameID = thegame.id
-  //Store it in the list of game
+  // Store it in the list of games
   this.games[ thegame.id ] = thegame;
-  //Keep track
+  // Keep track
   this.game_count++;
   // store this socket into an array
   this.clients[thegame.player_host.userID] = client;

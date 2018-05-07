@@ -32,7 +32,7 @@ if (process.env.NODE_ENV === 'development') {
     stats: 'none',
   }));
 
-  // let express app use to use HMR (Hot Module Replacement)
+  // let express app use HMR (Hot Module Replacement)
   app.use(webpackHotMiddleware(compiler));
 
   // middleware to use for all requests
@@ -50,9 +50,7 @@ if (process.env.NODE_ENV === 'development') {
       if(err) {
 	      return next(err);
 		  }
-
       res.send('we are at root');
-
 	  })
   });
 
@@ -84,7 +82,7 @@ console.log('\n Express :: Listening on port ' + PORT );
 const server = app.listen(app.get('port'));
 // Instantiate Socket.IO, have it listen to the express server
 const io = require('socket.io')(server);
-// import the global Object where all the logic of the game server
+// import the global Object gameserver where all the logic of the game server
 gameserver = require('./gameserver.js');
 
 io.on('connection', (client) => {
