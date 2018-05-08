@@ -22,8 +22,8 @@ if (process.env.NODE_ENV === 'development') {
   /* development environment */
 
   const compiler = webpack(config)
-
-  app.use(webpackDevMiddleware(compiler, {
+  
+  router.use(webpackDevMiddleware(compiler, {
     // colors webpack output
     stats: {
       colors: true,
@@ -33,7 +33,7 @@ if (process.env.NODE_ENV === 'development') {
   }));
 
   // let express app use HMR (Hot Module Replacement)
-  app.use(webpackHotMiddleware(compiler));
+  router.use(webpackHotMiddleware(compiler));
 
   // middleware to use for all requests
   router.use(function(req, res, next) {
@@ -45,7 +45,7 @@ if (process.env.NODE_ENV === 'development') {
   // define the home page route
   router.get('/', (req, res, next) => {
     // requirement: html-webpack-plugin
-    // output the compiled static HTML file (dist/index.html)
+    // outputFileSystem is for handling the output files in memory instead of disk
     compiler.outputFileSystem.readFile(HTML_FILE, (err, result) => {
       if(err) {
 	      return next(err);
@@ -65,6 +65,7 @@ if (process.env.NODE_ENV === 'development') {
   router.use(express.static(DIST_DIR));
 
   console.log("\nserving the static HTML " + HTML_FILE + " file to the home page (localhost/) ")
+  // define the home page route
   router.get('/', (req, res) =>  {
     res.sendFile(HTML_FILE);
   });

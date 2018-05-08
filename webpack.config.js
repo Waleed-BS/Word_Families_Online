@@ -21,12 +21,6 @@ const HotModuleReplacementPlugin = new webpack.HotModuleReplacementPlugin()
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 module.exports = {
-  devServer: {
-    contentBase: path.join(__dirname, 'dist'),
-    compress: true,
-    port: 3000,
-    historyApiFallback: true,
-  },
   /* bundler starts the bundling process */
   entry: [
     './client/index.js',
@@ -55,35 +49,18 @@ module.exports = {
       },
       {
         test: /\.(jpe?g|png|gif|svg)$/,
-        use: [
-          {
-            loader: 'url-loader',
-            options:
-            {
-              limit: 5000,
-              name: 'client/assets/images/[name].[ext]',
-            },
-          },
-          {
-            loader: 'image-webpack-loader',
-            options:
-            {
-              name: 'client/assets/images[name].[ext]',
-            },
-          },
-        ],
+        loader: 'url-loader',
+        options: {
+          limit: 5000,
+          name: 'client/assets/images/[name].[ext]',
+        },
       },
       {
         test: /\.(eot|ttf|woff|woff2)$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options:
-            {
-              name: 'assets/fonts/[name].[ext]',
-            },
-          },
-        ],
+        loader: 'file-loader',
+        options: {
+         name: 'assets/fonts/[name].[ext]',
+        },
       },
     ],
   },
