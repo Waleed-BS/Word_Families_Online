@@ -1,4 +1,4 @@
-# Word Families Online
+# Word Families Online (still in development) 
 
 Word Families Online is a realtime multiplayer game that consists of two players, one being a **director** and the other a **player**.
 
