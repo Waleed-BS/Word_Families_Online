@@ -11,7 +11,6 @@ Word Families Online is a realtime multiplayer game that consists of two players
 ### Install Dependencies: 
 
 ```
-$ git clone https://github.com/Waleed-BS/Word_Families_Online.git
 $ cd Word_Families_Online
 $ npm install
 ```
