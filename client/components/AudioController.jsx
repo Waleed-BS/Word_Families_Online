@@ -23,23 +23,24 @@ class AudioController extends React.Component {
 
   componentDidMount() {
 
-    console.log('AudioController React Component Did Mount');
-
     // if player is player_client
     if(this.props.player_role === 'player') {
       // recover the sent audio by player_host
       // when socket player_host sends audio voice to express server
       this.props.socket.on('onSendAudioToClient', (data) => {
 
-        const audioPlayer = document.getElementById('audioPlayer');
-
         // rerender this component by changing the state to the new received audio
         this.setState({
           recordedBlob: data.recordedBlob
         })
 
+        const audioPlayer = document.getElementById('audioPlayer');
         // callback to execute when audio finish playing
         audioPlayer.onended = () => {
+
+          // remove the audio
+          data.recordedBlob.blobURL = '';
+          this.setState({ recordedBlob: data.recordedBlob });
 
           const minutesLabel = document.getElementById("minutes");
           const secondsLabel = document.getElementById("seconds");

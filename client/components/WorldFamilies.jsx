@@ -15,12 +15,13 @@ import AudioController from './AudioController.jsx';
 class WorldFamilies extends React.Component {
 
   state = {
-    IsPlayerWaiting: false,
+    isPlayerWaiting: false,
     hasGameStarted: false,
     currentGame: null,
     player: '',
     currentTimeDate: '',
     socket: null,
+    isAnswerRight: null,
   }
 
   // shouldComponentUpdate(nextProps, nextState) {
@@ -30,24 +31,18 @@ class WorldFamilies extends React.Component {
 
   componentDidMount() {
 
-    console.log('WorldFamilies React Component Did Mount');
-
   }
 
   setHasGameStarted = (boolean) => {
-
     this.setState({
       hasGameStarted: boolean,
     });
-
   }
 
   setIsPlayerWaiting = (boolean) => {
-
     this.setState({
-      IsPlayerWaiting: boolean,
+      isPlayerWaiting: boolean,
     });
-
   }
 
   wait = () => {
@@ -82,32 +77,44 @@ class WorldFamilies extends React.Component {
   }
 
   startGame = () => {
-
     this.setIsPlayerWaiting(false);
     this.setHasGameStarted(true);
+  }
+
+  onAnswer = (answer, random_highlight) => {
+
+    if (answer === random_highlight) {
+      this.setState({ isAnswerRight: true });
+
+    } else if (answer === random_highlight) {
+      this.setState({ isAnswerRight: true });
+
+    } else {
+      this.setState({ isAnswerRight: false });
+
+    }
 
   }
 
   render() {
-    const { IsPlayerWaiting, hasGameStarted, player, socket } = this.state;
+    const { isPlayerWaiting, hasGameStarted, player, socket, isAnswerRight } = this.state;
     // console.log('Has game started?', hasGameStarted);
     console.log('Rendering current game:', this.state.currentGame);
     console.log('I am', player.role);
-
 
     // const { role } = this.props;
     return (
       <div className="WorldFamilies">
 
         { hasGameStarted ? <div>
-          <Images />
+          <Images player_role={player.role} socket={socket} onAnswer={this.onAnswer}/>
           <AudioController player_role={player.role} socket={socket}/>
           {/* <p>{this.state.currentTimeDate}</p> */}
         </div> : <div>
           <UserInputForm wait={this.wait} />
         </div> }
 
-        { IsPlayerWaiting && <div>
+        { isPlayerWaiting && <div>
           <p>Waiting for another player to start the game &nbsp;
             <img
               src="https://zippy.gfycat.com/SkinnySeveralAsianlion.gif"
@@ -115,8 +122,12 @@ class WorldFamilies extends React.Component {
               width="20"
             />
           </p>
-
         </div> }
+
+        { isAnswerRight === true &&
+          <p>Answer is correct!</p>
+        }
+        { isAnswerRight === false && <p>Wrong!</p> }
 
       </div>
     );

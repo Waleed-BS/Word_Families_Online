@@ -6,6 +6,7 @@
 .container {
 
 }
+
 .Images {
   // align-items: center;
   display: flex;
@@ -15,11 +16,22 @@
   flex-wrap: nowrap | wrap | wrap-reverse;
 }
 
-.Images img {
-  text-align: center;
-
+.Images {
+  img {
+    text-align: center;
+    border-radius: 50%;
+    height: 400px;
+    width: 400px;
+  }
+  input {
+    border-radius: 50%;
+    border: none;
+    width: 300px;
+    height: 300px;
+    background-image: url("../assets/images/goat.jpg");
+  }
 }
 
 .Images .Highlight {
-  border: solid Blue 1px;
+  border: solid red 5px;
 }

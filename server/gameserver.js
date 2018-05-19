@@ -110,7 +110,7 @@ gameserver.startGame = function(game, client_host, client_client) {
   // game is active and it's going to start
   game.active = true;
   this.log('\n\thost ' + game.player_host.userID + ' is the director');
-  this.log('\tclient ' + game.player_client.userID + ' is the player')
+  this.log('\tclient ' + game.player_client.userID + ' is the player');
   this.log('\n\tgame is starting!');
   // emit this game and the player of that game to the host's browser
   client_host.emit('onStartGame', {
@@ -121,16 +121,25 @@ gameserver.startGame = function(game, client_host, client_client) {
   client_client.emit('onStartGame', {
     currentGame: game,
     player: game.player_client, // emit player_client to this socket
-  })
-  // not sure about this yet but I'll see what I can do with it
+  });
+
+  // todo: it is ideally to use rooms, i will see what I can do with this later
   // client_host.join('start game room');
   // client_client.join('start game room');
+
   // When player_host sends the audio record, receive it
   client_host.on('onSendAudioToServer', (data) => {
     this.log('\n\taudio received from host ' + client_host.userID)
     // send the player_client the audio record
     client_client.emit('onSendAudioToClient', { recordedBlob: data.recordedBlob });
-    this.log('\taudio is sent to client ' + client_host.userID);
+    this.log('\taudio is sent to client ' + client_client.userID);
+  })
+
+  client_host.on('onSendHighlightToServer', (data) => {
+    this.log('\n\trandom highlight received from host ' + client_host.userID);
+    // send the player_client the random highlight
+    client_client.emit('onSendHighlightToClient', { random_highlight: data.random_highlight });
+    this.log('\trandom highlight is sent to client ' + client_client.userID);
   })
 
 }; // startGame()

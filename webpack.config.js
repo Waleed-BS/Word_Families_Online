@@ -48,7 +48,7 @@ module.exports = {
         exclude: /node_modules/,
       },
       {
-        test: /\.(jpe?g|png|gif|svg)$/,
+        test: /\.(jpg|jpe?g|png|gif|svg)$/,
         loader: 'url-loader',
         options: {
           limit: 5000,
