@@ -31,7 +31,8 @@ class UserInputForm extends React.Component {
     // disable find game button
     document.getElementById('findGame').disabled = 'true';
     // call wait from the parent component
-    this.props.wait()
+    const { wait } = this.props;
+    wait()
 
     // check if username && country are not empty
     // if(this.state.username === "") {

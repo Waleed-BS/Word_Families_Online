@@ -7,7 +7,10 @@ const UUID = require('node-uuid');
 
 const webpack = require('webpack');
 const config = require('../webpack.config');
+// This is a middleware with same functions of webpack-dev-server,
+// but in format that can be injected to the server/express application.
 const webpackDevMiddleware = require('webpack-dev-middleware');
+// to use HMR on express server
 const webpackHotMiddleware = require('webpack-hot-middleware');
 
 const express = require('express');
@@ -21,8 +24,9 @@ const HTML_FILE = path.join(__dirname, '../dist/index.html');
 if (process.env.NODE_ENV === 'development') {
   /* development environment */
 
+  // returns a compiler instance
   const compiler = webpack(config)
-  
+
   router.use(webpackDevMiddleware(compiler, {
     // colors webpack output
     stats: {
@@ -44,7 +48,6 @@ if (process.env.NODE_ENV === 'development') {
 
   // define the home page route
   router.get('/', (req, res, next) => {
-    // requirement: html-webpack-plugin
     // outputFileSystem is for handling the output files in memory instead of disk
     compiler.outputFileSystem.readFile(HTML_FILE, (err, result) => {
       if(err) {

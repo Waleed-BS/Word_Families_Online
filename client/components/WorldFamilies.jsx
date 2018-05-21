@@ -21,6 +21,7 @@ class WorldFamilies extends React.Component {
     player: '',
     currentTimeDate: '',
     socket: null,
+    isAnswered: false,
     isAnswerRight: null,
   }
 
@@ -77,38 +78,60 @@ class WorldFamilies extends React.Component {
   }
 
   startGame = () => {
+
     this.setIsPlayerWaiting(false);
     this.setHasGameStarted(true);
+
   }
 
+  // callback to execute when player answers the question
   onAnswer = (answer, random_highlight) => {
 
-    if (answer === random_highlight) {
-      this.setState({ isAnswerRight: true });
+    // const minutesLabel = document.getElementById("minutes");
+    // const secondsLabel = document.getElementById("seconds");
+    // // then set it back to 0 when it reaches 60
+    // secondsLabel.innerHTML = 0;
+    // // set the minutes element
+    // minutesLabel.innerHTML = 0;
 
-    } else if (answer === random_highlight) {
-      this.setState({ isAnswerRight: true });
-
+    // if question is not answered already
+    if (this.state.isAnswered === false) {
+      if (answer === random_highlight) {
+        this.setState({ isAnswerRight: true });
+      } else if (answer === random_highlight) {
+        this.setState({ isAnswerRight: true });
+      } else {
+        this.setState({ isAnswerRight: false });
+      }
+    // if already answred
     } else {
-      this.setState({ isAnswerRight: false });
-
+      console.log('You already answered!');
     }
+
+    this.setState({ isAnswered: true });
 
   }
 
   render() {
-    const { isPlayerWaiting, hasGameStarted, player, socket, isAnswerRight } = this.state;
-    // console.log('Has game started?', hasGameStarted);
-    console.log('Rendering current game:', this.state.currentGame);
-    console.log('I am', player.role);
+    const {
+      isPlayerWaiting,
+      hasGameStarted,
+      player,
+      socket,
+      isAnswerRight,
+      isAnswered
+    } = this.state;
 
-    // const { role } = this.props;
+    // console.log('Has game started?', hasGameStarted);
+    // console.log('Rendering current game:', this.state.currentGame);
+    // console.log('I am', player.role);
+
     return (
       <div className="WorldFamilies">
 
         { hasGameStarted ? <div>
-          <Images player_role={player.role} socket={socket} onAnswer={this.onAnswer}/>
-          <AudioController player_role={player.role} socket={socket}/>
+          <Images player_role={player.role} socket={socket} onAnswer={this.onAnswer} />
+          <AudioController player_role={player.role} socket={socket} isAnswered={isAnswered} />
           {/* <p>{this.state.currentTimeDate}</p> */}
         </div> : <div>
           <UserInputForm wait={this.wait} />

@@ -11,7 +11,6 @@ class AudioController extends React.Component {
   state = {
     record: false,
     recordedBlob: '',
-    blobURL: '',
     isRecorded: false,
     isSent: false,
     isAnswered: false,
@@ -42,46 +41,52 @@ class AudioController extends React.Component {
           data.recordedBlob.blobURL = '';
           this.setState({ recordedBlob: data.recordedBlob });
 
-          const minutesLabel = document.getElementById("minutes");
-          const secondsLabel = document.getElementById("seconds");
-          let totalSeconds = 0;
-
-          // call setTime function every second
-          setInterval(setTime, 1000);
-
-          // set a timer
-          function setTime() {
-
-            // seconds start from 1 (since the function got called after a second)
-            ++totalSeconds;
-
-            // set the seconds element from 0 to 59 then then
-            // then set it back to 0 when it reaches 60
-            secondsLabel.innerHTML = pad(totalSeconds % 60);
-            // set the minutes element
-            minutesLabel.innerHTML = pad(parseInt(totalSeconds / 60));
+          if (this.state.isAnswered === false) {
+            this.startStopWatch();
+          } else {
+            console.log("JIOWFHJPWIFJOPAFJPOQWFJPAO")
           }
-
-          function pad(val) {
-            // convert the passed value to string
-            let valString = val + "";
-            // if there's only one digit, add a zero
-            if (valString.length < 2) {
-              return "0" + valString;
-            // else return the same string value
-            } else {
-              return valString;
-            }
-          }
-
-          // callback to execute when player answers the question
-
-          //todo: when player_client answer, stop the timer and store
-          // if(this.state.isAnswered)
 
         } // audioPlayer.onended
       }); // socket.on('onSendAudioToClient'
     } // if(this.props.player_role === 'player')
+
+  }
+
+  startStopWatch = () => {
+
+    const { isAnswered } = this.state;
+
+    const minutesLabel = document.getElementById("minutes");
+    const secondsLabel = document.getElementById("seconds");
+    let totalSeconds = 0;
+
+    const intervalID = setInterval(setTime, 1000);
+    // to clearInterval from anywhere in this component
+    this.setState({ intervalID });
+
+    // set a timer
+    function setTime() {
+      // seconds start from 1 (since the function got called after a second)
+      ++totalSeconds;
+      // set the seconds element from 0 to 59 then then
+      // then set it back to 0 when it reaches 60
+      secondsLabel.innerHTML = pad(totalSeconds % 60);
+      // set the minutes element
+      minutesLabel.innerHTML = pad(parseInt(totalSeconds / 60));
+    }
+
+    function pad(val) {
+      // convert the passed value to string
+      let valString = val + "";
+      // if there's only one digit, add a zero
+      if (valString.length < 2) {
+        return "0" + valString;
+      // else return the same string value
+      } else {
+        return valString;
+      }
+    }
 
   }
 
@@ -125,6 +130,11 @@ class AudioController extends React.Component {
 
   render() {
 
+    // when player answers the question
+    if (this.props.isAnswered === true) {
+      clearInterval(this.state.intervalID);
+    }
+
     const { recordedBlob, isRecorded, isSent } = this.state;
     const { player_role } = this.props;
 
@@ -134,8 +144,10 @@ class AudioController extends React.Component {
         {/* render this if player is player_host */}
         { player_role === 'director' ? <div>
           <ReactMic record={this.state.record} onStop={this.onStop} />
-          <button value={true} onClick={(event) => this.startRecording(event.target.value)} type="button">Start</button>
+          <br></br>
+          <button value={true} onClick={(event) => this.startRecording(event.target.value)} type="button">Record</button>
           <button value={false} onClick={(event) => this.stopRecording(event.target.value)} type="button">Stop</button>
+          <br></br>
           <audio controls src={recordedBlob.blobURL}></audio>
           <br/>
           {/* enable send button if audio is recorded */}
