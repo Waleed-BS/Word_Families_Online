@@ -3,34 +3,38 @@
   // justify-content: center;
 }
 
-.container {
-
-}
-
 .Images {
   // align-items: center;
   display: flex;
-  text-align: center;
-  // flex-direction:row;
+  // text-align: center;
+  flex-direction: row;
   justify-content: center;
-  flex-wrap: nowrap | wrap | wrap-reverse;
-}
-
-.Images {
+  // flex-wrap: nowrap | wrap | wrap-reverse;
+  background: url("https://assets.awwwards.com/awards/images/2015/04/pattern.jpg");
   img {
-    text-align: center;
+    // text-align: center;
     border-radius: 50%;
     height: 400px;
     width: 400px;
+    border: solid black 8px;
   }
-  input {
-    border-radius: 50%;
-    border: none;
-    width: 300px;
-    height: 300px;
-    background-image: url("../assets/images/goat.jpg");
+  h2 {
+    // top: 200px;
+    // left: 0px;
+    width: 10%;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    // display: inline-block;
+    padding: 0px 15px;
+    color: white;
+    font: bold 18px/34px Helvetica, Sans-Serif;
+    // letter-spacing: -1px;
+    background: rgb(0, 0, 0); /* fallback color */
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 40%;
   }
   .Highlight {
-    border: solid blue 5px;
+    border: solid blue 8px;
   }
 }

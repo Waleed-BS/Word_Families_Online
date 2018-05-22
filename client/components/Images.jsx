@@ -47,6 +47,7 @@ class Images extends React.Component {
             alt=""
             src={goat_image}
           />
+          <h2 id="image1_name">Goat</h2>
         </div> : <div>
           <img
             id="image1"
@@ -54,6 +55,7 @@ class Images extends React.Component {
             src={goat_image}
             onClick={() => this.props.onAnswer(true, random_highlight)}
           />
+          <h2 id="image1_name">Goat</h2>
         </div> }
         { player_role === 'director' ? <div>
           <img
@@ -62,6 +64,7 @@ class Images extends React.Component {
             alt=""
             src={coat_image}
           />
+          <h2 id="image2_name">Coat</h2>
         </div> : <div>
           <img
             id="image2"
@@ -69,6 +72,7 @@ class Images extends React.Component {
             src={coat_image}
             onClick={() => this.props.onAnswer(false, random_highlight)}
           />
+          <h2 id="image2_name">Coat</h2>
         </div> }
 
       </div>
