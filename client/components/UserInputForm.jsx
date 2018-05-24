@@ -28,25 +28,18 @@ class UserInputForm extends React.Component {
 
   // callback to execute when player clicks on find a game button
   handleFindGameButton() {
-    // disable find game button
-    document.getElementById('findGame').disabled = 'true';
-    // call wait from the parent component
-    const { wait } = this.props;
-    wait()
-
     // check if username && country are not empty
-    // if(this.state.username === "") {
-    //   this.setState({
-    //     inputError: 'Please enter your username'
-    //   })
-    // } else if( this.state.country === "") {
-    //   this.setState({
-    //     inputError: 'Please enter your country'
-    //   })
-    // } else {
-    //   this.props.startGame();
-    // }
-    // console.log("isPlayClicked", this.state.isPlayClicked);
+    if(this.state.username === "") {
+      this.setState({
+        inputError: 'Please enter your username'
+      })
+    } else {
+      // disable find game button
+      document.getElementById('findGame').disabled = 'true';
+      // call wait function from the parent component
+      this.props.wait()
+    }
+
   }
 
   render() {

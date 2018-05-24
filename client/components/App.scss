@@ -37,4 +37,16 @@
   .Highlight {
     border: solid blue 8px;
   }
+  .Image1_Correct_Highlight {
+    border: solid green 8px;
+  }
+  .Image1_Wrong_Highlight {
+    border: solid red 8px !important;
+  }
+  .Image2_Correct_Highlight {
+    border: solid green 8px;
+  }
+  .Image2_Wrong_Highlight {
+    border: solid red 8px;
+  }
 }

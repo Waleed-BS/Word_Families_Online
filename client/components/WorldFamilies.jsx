@@ -22,7 +22,7 @@ class WorldFamilies extends React.Component {
     currentTimeDate: '',
     socket: null,
     isAnswered: false,
-    isAnswerRight: null,
+    isCorrect: null,
   }
 
   // shouldComponentUpdate(nextProps, nextState) {
@@ -86,28 +86,17 @@ class WorldFamilies extends React.Component {
 
   // callback to execute when player answers the question
   onAnswer = (answer, random_highlight) => {
-
-    // const minutesLabel = document.getElementById("minutes");
-    // const secondsLabel = document.getElementById("seconds");
-    // // then set it back to 0 when it reaches 60
-    // secondsLabel.innerHTML = 0;
-    // // set the minutes element
-    // minutesLabel.innerHTML = 0;
-
     // if question is not answered already
     if (this.state.isAnswered === false) {
       if (answer === random_highlight) {
-        this.setState({ isAnswerRight: true });
-      } else if (answer === random_highlight) {
-        this.setState({ isAnswerRight: true });
+        this.setState({ isCorrect: true });
       } else {
-        this.setState({ isAnswerRight: false });
+        this.setState({ isCorrect: false });
       }
     // if already answred
     } else {
       console.log('You already answered!');
     }
-
     this.setState({ isAnswered: true });
 
   }
@@ -118,7 +107,7 @@ class WorldFamilies extends React.Component {
       hasGameStarted,
       player,
       socket,
-      isAnswerRight,
+      isCorrect,
       isAnswered
     } = this.state;
 
@@ -130,7 +119,7 @@ class WorldFamilies extends React.Component {
       <div className="WorldFamilies">
 
         { hasGameStarted ? <div>
-          <Images player_role={player.role} socket={socket} onAnswer={this.onAnswer} />
+          <Images player_role={player.role} socket={socket} onAnswer={this.onAnswer} isCorrect={this.state.isCorrect}/>
           <AudioController player_role={player.role} socket={socket} isAnswered={isAnswered} />
           {/* <p>{this.state.currentTimeDate}</p> */}
         </div> : <div>
@@ -146,11 +135,6 @@ class WorldFamilies extends React.Component {
             />
           </p>
         </div> }
-
-        { isAnswerRight === true &&
-          <p>Answer is correct!</p>
-        }
-        { isAnswerRight === false && <p>Wrong!</p> }
 
       </div>
     );
