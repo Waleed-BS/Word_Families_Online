@@ -8,6 +8,8 @@ Word Families Online is a realtime multiplayer game that consists of two players
 
 ## Documentation
 
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+
 ### Prerequisites
 
 You only need [**Node.js**](https://nodejs.org/en/) installed.
